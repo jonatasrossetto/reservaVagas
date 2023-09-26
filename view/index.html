@@ -49,69 +49,152 @@
             <label> Cor do veículo <br></label>
             <input type="text" id="cor_veiculo" /><br>
             <label> Número da vaga <br></label>
-            <input list="vagas_disponiveis" /><br><br>
-            <button>Cadastrar</button><br><br>
+            <input list="vagas_disponiveis" id="vaga_escolhida" /><br><br>
+            <button id="botao_cadastrar">Cadastrar</button><br><br>
         </div>
         <datalist id="vagas_disponiveis">
-            <option value="vaga 1"></option>
-            <option value="vaga 2"></option>
-            <option value="vaga 3"></option>
-            <option value="vaga 4"></option>
-            <option value="vaga 5"></option>
-            <option value="vaga 6"></option>
-            <option value="vaga 7"></option>
-            <option value="vaga 8"></option>
-            <option value="vaga 9"></option>
-            <option value="vaga 10"></option>
-            <option value="vaga 11"></option>
-            <option value="vaga 12"></option>
-            <option value="vaga 13"></option>
+            <option value="01"></option>
+            <option value="02"></option>
+            <option value="03"></option>
+            <option value="04"></option>
+            <option value="05"></option>
+            <option value="06"></option>
+            <option value="07"></option>
+            <option value="08"></option>
+            <option value="09"></option>
+            <option value="10"></option>
+            <option value="11"></option>
+            <option value="12"></option>
+            <option value="13"></option>
         </datalist>
     </div>
 
-    <div id="relatorio_vagas" style="display: block;">
+    <div id="relatorios" style="display: block;">
         <br><br>
-        <h2>Relatório de vagas</h2>
+        <h2>Relatórios</h2>
+        <a href=".">Vagas ocupadas</a>
+        <a href=".">Todas as vagas</a>
+        <br><br>
         <table id="tabela_relatorio_vagas">
             <tr>
-                <th>Company</th>
-                <th>Contact</th>
-                <th>Country</th>
+                <th>Vaga</th>
+                <th>Proprietário</th>
+                <th>Apartamento</th>
+                <th>Placa</th>
             </tr>
             <tr>
-                <td>Alfreds Futterkiste</td>
-                <td>Maria Anders</td>
-                <td>Germany</td>
+                <td>01</td>
+                <td>José</td>
+                <td>101</td>
+                <td>AAA1234</td>
             </tr>
             <tr>
-                <td>Centro comercial Moctezuma</td>
-                <td>Francisco Chang</td>
-                <td>Mexico</td>
+                <td>02</td>
+                <td>João</td>
+                <td>102</td>
+                <td>AAA2345</td>
             </tr>
             <tr>
-                <td>Ernst Handel</td>
-                <td>Roland Mendel</td>
-                <td>Austria</td>
+                <td>03</td>
+                <td>Maria</td>
+                <td>104</td>
+                <td>AAA3456</td>
             </tr>
             <tr>
-                <td>Island Trading</td>
-                <td>Helen Bennett</td>
-                <td>UK</td>
+                <td>04</td>
+                <td>Ana</td>
+                <td>201</td>
+                <td>AAA4567</td>
             </tr>
             <tr>
-                <td>Laughing Bacchus Winecellars</td>
-                <td>Yoshi Tannamuri</td>
-                <td>Canada</td>
+                <td>05</td>
+                <td>Manoel</td>
+                <td>202</td>
+                <td>AAA5678</td>
             </tr>
             <tr>
-                <td>Magazzini Alimentari Riuniti</td>
-                <td>Giovanni Rovelli</td>
-                <td>Italy</td>
+                <td>06</td>
+                <td>Beatriz</td>
+                <td>203</td>
+                <td>AAA6789</td>
             </tr>
         </table>
     </div>
 
 
 </body>
+
+
+<script>
+    const placaVeiculo = document.getElementById('placa_veiculo');
+    const nomeProprietario = document.getElementById('nome_proprietario');
+    const numeroApartamento = document.getElementById('numero_apartamento');
+    const modeloVeiculo = document.getElementById('modelo_veiculo');
+    const corVeiculo = document.getElementById('cor_veiculo');
+    const botaoCadastrar = document.getElementById('botao_cadastrar');
+    const vagaEscolhida = document.getElementById('vaga_escolhida');
+    const vagasDisponiveis = document.getElementById('vagas_disponiveis');
+
+    class DadosReserva {
+        constructor(placa, proprietario, apartamento, modelo, cor, numeroVaga) {
+            this.placa = placa;
+            this.proprietario = proprietario;
+            this.apartamento = apartamento;
+            this.modelo = modelo;
+            this.cor = cor;
+            this.vaga = Number.parseInt(numeroVaga);
+        }
+    }
+
+    class Vagas {
+        _statusDaVaga = [];
+        _vagasReservadas = [];
+
+        constructor(quantidadeVagas) {
+            if (isNaN(quantidadeVagas) || quantidadeVagas < 1) {
+                throw new Error('Quantidade de vagas inválida');
+            }
+            for (let i = 0; i < quantidadeVagas; i++) {
+                this._statusDaVaga.push(false);
+                console.log("vaga: " + (i + 1) + " status:" + this._statusDaVaga[i]);
+            }
+        }
+
+        estaDisponivel(numeroVaga) {
+            return !this._statusDaVaga[numeroVaga - 1];
+        }
+
+        reservarVaga(dadosReserva) {
+            if (this.estaDisponivel(dadosReserva.vaga - 1)) {
+                this._statusDaVaga[dadosReserva.vaga - 1] = true;
+                this._vagasReservadas.push(dadosReserva);
+                return true;
+            }
+            return false;
+        }
+
+        listaVagasDisponiveis() {
+            let vagasDisponiveis = [];
+            for (let i = 0; i < this._statusDaVaga.length; i++) {
+                console.log("vaga: " + (i + 1) + " status:" + this._statusDaVaga[i]);
+                if (!this._statusDaVaga[i]) {
+                    vagasDisponiveis.push(i + 1);
+                }
+            }
+            return vagasDisponiveis;
+        }
+    }
+
+    let vagas = new Vagas(10);
+
+    botao_cadastrar.addEventListener('click', () => {
+        console.log('clicou em botao_cadastrar');
+        let dado = new DadosReserva(placaVeiculo.value, nomeProprietario.value, numeroApartamento.value, modeloVeiculo.value, corVeiculo.value, vagaEscolhida.value);
+        console.log(dado);
+        console.log("reservar vaga: " + vagas.reservarVaga(dado));
+        console.log(vagas.listaVagasDisponiveis());
+    });
+
+</script>
 
 </html>
