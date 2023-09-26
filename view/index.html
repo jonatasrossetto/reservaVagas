@@ -137,6 +137,10 @@
 
     class DadosReserva {
         constructor(placa, proprietario, apartamento, modelo, cor, numeroVaga) {
+            if (!placa || !proprietario || !apartamento || !modelo || !cor || !numeroVaga) {
+                alert('Dados inválidos');
+                throw new Error('Dados inválidos');
+            }
             this.placa = placa;
             this.proprietario = proprietario;
             this.apartamento = apartamento;
@@ -156,7 +160,7 @@
             }
             for (let i = 0; i < quantidadeVagas; i++) {
                 this._statusDaVaga.push(false);
-                console.log("vaga: " + (i + 1) + " status:" + this._statusDaVaga[i]);
+                // console.log("vaga: " + (i + 1) + " status:" + this._statusDaVaga[i]);
             }
         }
 
@@ -176,13 +180,18 @@
         listaVagasDisponiveis() {
             let vagasDisponiveis = [];
             for (let i = 0; i < this._statusDaVaga.length; i++) {
-                console.log("vaga: " + (i + 1) + " status:" + this._statusDaVaga[i]);
+                // console.log("vaga: " + (i + 1) + " status:" + this._statusDaVaga[i]);
                 if (!this._statusDaVaga[i]) {
                     vagasDisponiveis.push(i + 1);
                 }
             }
             return vagasDisponiveis;
         }
+
+        listaDeVagasReservadas() {
+            return this._vagasReservadas.sort((a, b) => a.vaga - b.vaga);
+        }
+
     }
 
     let vagas = new Vagas(10);
@@ -191,11 +200,17 @@
     botao_cadastrar.addEventListener('click', () => {
         console.log('clicou em botao_cadastrar');
         let dado = new DadosReserva(placaVeiculo.value, nomeProprietario.value, numeroApartamento.value, modeloVeiculo.value, corVeiculo.value, vagaEscolhida.value);
-        console.log(dado);
-        console.log("reservar vaga: " + vagas.reservarVaga(dado));
-        console.log(vagas.listaVagasDisponiveis());
-        atualizarVagasDisponiveis(vagas);
-        limparFormulario();
+        let reservaRealizada = vagas.reservarVaga(dado);
+        // console.log(vagas.listaVagasDisponiveis());
+        if (reservaRealizada) {
+            alert('Reserva realizada com sucesso');
+            atualizarVagasDisponiveis(vagas);
+            limparFormulario();
+            atualizarRelatorioVagas(vagas);
+        } else {
+            alert('Vaga já reservada');
+        }
+
     });
 
     function atualizarVagasDisponiveis(vagas) {
@@ -214,6 +229,15 @@
         modeloVeiculo.value = '';
         corVeiculo.value = '';
         vagaEscolhida.value = '';
+    }
+
+    function atualizarRelatorioVagas(vagas) {
+        const htmlTabelaRelatorioVagas = document.getElementById('tabela_relatorio_vagas');
+        htmlTabelaRelatorioVagas.innerHTML = '';
+        htmlTabelaRelatorioVagas.innerHTML += '<tr><th>Vaga</th><th>Proprietário</th><th>Apartamento</th><th>Placa</th></tr>';
+        vagas.listaDeVagasReservadas().forEach(element => {
+            htmlTabelaRelatorioVagas.innerHTML += '<tr><td>' + element.vaga + '</td><td>' + element.proprietario + '</td><td>' + element.apartamento + '</td><td>' + element.placa + '</td></tr>';
+        });
     }
 
 </script>
