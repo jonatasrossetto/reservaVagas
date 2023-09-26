@@ -133,7 +133,7 @@
     const corVeiculo = document.getElementById('cor_veiculo');
     const botaoCadastrar = document.getElementById('botao_cadastrar');
     const vagaEscolhida = document.getElementById('vaga_escolhida');
-    const vagasDisponiveis = document.getElementById('vagas_disponiveis');
+
 
     class DadosReserva {
         constructor(placa, proprietario, apartamento, modelo, cor, numeroVaga) {
@@ -186,6 +186,7 @@
     }
 
     let vagas = new Vagas(10);
+    atualizarVagasDisponiveis(vagas);
 
     botao_cadastrar.addEventListener('click', () => {
         console.log('clicou em botao_cadastrar');
@@ -193,7 +194,27 @@
         console.log(dado);
         console.log("reservar vaga: " + vagas.reservarVaga(dado));
         console.log(vagas.listaVagasDisponiveis());
+        atualizarVagasDisponiveis(vagas);
+        limparFormulario();
     });
+
+    function atualizarVagasDisponiveis(vagas) {
+        const htmlVagasDisponiveis = document.getElementById('vagas_disponiveis');
+        const listaDeVagasDisponiveis = vagas.listaVagasDisponiveis();
+        htmlVagasDisponiveis.innerHTML = '';
+        listaDeVagasDisponiveis.forEach(element => {
+            htmlVagasDisponiveis.innerHTML += '<option value="' + element + '"></option>';
+        });
+    }
+
+    function limparFormulario() {
+        placaVeiculo.value = '';
+        nomeProprietario.value = '';
+        numeroApartamento.value = '';
+        modeloVeiculo.value = '';
+        corVeiculo.value = '';
+        vagaEscolhida.value = '';
+    }
 
 </script>
 
