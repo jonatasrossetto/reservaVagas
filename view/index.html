@@ -81,42 +81,14 @@
                 <th>Proprietário</th>
                 <th>Apartamento</th>
                 <th>Placa</th>
+                <th>ações</th>
             </tr>
             <tr>
-                <td>01</td>
-                <td>José</td>
-                <td>101</td>
-                <td>AAA1234</td>
-            </tr>
-            <tr>
-                <td>02</td>
-                <td>João</td>
-                <td>102</td>
-                <td>AAA2345</td>
-            </tr>
-            <tr>
-                <td>03</td>
-                <td>Maria</td>
-                <td>104</td>
-                <td>AAA3456</td>
-            </tr>
-            <tr>
-                <td>04</td>
-                <td>Ana</td>
-                <td>201</td>
-                <td>AAA4567</td>
-            </tr>
-            <tr>
-                <td>05</td>
-                <td>Manoel</td>
-                <td>202</td>
-                <td>AAA5678</td>
-            </tr>
-            <tr>
-                <td>06</td>
-                <td>Beatriz</td>
-                <td>203</td>
-                <td>AAA6789</td>
+                <td>00</td>
+                <td>nome</td>
+                <td>no apt</td>
+                <td>placa</td>
+                <td> <button>apagar</button></td>
             </tr>
         </table>
     </div>
@@ -137,10 +109,10 @@
 
     class DadosReserva {
         constructor(placa, proprietario, apartamento, modelo, cor, numeroVaga) {
-            if (!placa || !proprietario || !apartamento || !modelo || !cor || !numeroVaga) {
-                alert('Dados inválidos');
-                throw new Error('Dados inválidos');
-            }
+            // if (!placa || !proprietario || !apartamento || !modelo || !cor || !numeroVaga) {
+            //     alert('Dados inválidos');
+            //     throw new Error('Dados inválidos');
+            // }
             this.placa = placa;
             this.proprietario = proprietario;
             this.apartamento = apartamento;
@@ -189,7 +161,14 @@
         }
 
         listaDeVagasReservadas() {
+
             return this._vagasReservadas.sort((a, b) => a.vaga - b.vaga);
+        }
+
+        apagarReserva(indice) {
+            console.log('apagando reserva:' + indice);
+            this._vagasReservadas.splice(indice, 1);
+            console.log(this.listaDeVagasReservadas());
         }
 
     }
@@ -231,14 +210,22 @@
         vagaEscolhida.value = '';
     }
 
+    function apagarReserva(indice) {
+        vagas.apagarReserva(indice);
+        atualizarRelatorioVagas(vagas);
+    }
+
     function atualizarRelatorioVagas(vagas) {
         const htmlTabelaRelatorioVagas = document.getElementById('tabela_relatorio_vagas');
         htmlTabelaRelatorioVagas.innerHTML = '';
-        htmlTabelaRelatorioVagas.innerHTML += '<tr><th>Vaga</th><th>Proprietário</th><th>Apartamento</th><th>Placa</th></tr>';
-        vagas.listaDeVagasReservadas().forEach(element => {
-            htmlTabelaRelatorioVagas.innerHTML += '<tr><td>' + element.vaga + '</td><td>' + element.proprietario + '</td><td>' + element.apartamento + '</td><td>' + element.placa + '</td></tr>';
+        htmlTabelaRelatorioVagas.innerHTML += '<tr><th>Vaga</th><th>Proprietário</th><th>Apartamento</th><th>Placa</th><th>Ação</th></tr>';
+        let vagasReservadas = vagas.listaDeVagasReservadas();
+        vagasReservadas.forEach((element, index) => {
+            htmlTabelaRelatorioVagas.innerHTML += '<tr><td>' + element.vaga + '</td><td>' + element.proprietario + '</td><td>' + element.apartamento + '</td><td>' + element.placa + '</td><td> <button onclick="apagarReserva(' + index + ');">apagar</button></td></tr>';
         });
     }
+
+
 
 </script>
 
