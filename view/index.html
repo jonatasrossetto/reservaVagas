@@ -4,38 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <style>
-        table {
-            font-family: arial, sans-serif;
-            border-collapse: collapse;
-            width: 100%;
-        }
-
-        td,
-        th {
-            border: 1px solid #dddddd;
-            text-align: left;
-            padding: 8px;
-        }
-
-        tr:nth-child(even) {
-            background-color: #dddddd;
-        }
-    </style>
-
+    <link rel="stylesheet" href="style.css">
     <title>Reserva de Vaga</title>
 </head>
 
 <body>
     <div id="menu_superior">
-        Sistema de Reserva de Vagas de Estacionamento <br>
+        <h2>Reserva de Vagas</h2>
         <button id="tela_cadastro">Cadastro</button>
         <button id="tela_relatorio">Relatório</button>
         <h4 id="quantidade_vagas_disponiveis"></h4>
     </div>
 
-    <div id="cadastro_reserva" style="background-color: aquamarine;display:block;">
+    <div id="cadastro_reserva" style="display:block;">
         <h3>Cadastro de Reserva de Vagas</h3>
         <div id="formulario_cadastro_reserva">
             <label> Placa do Veículo <br></label>
@@ -226,6 +207,7 @@
     telaCadastro.addEventListener('click', () => {
         console.log('clicou em tela_cadastro');
         atualizarQuantidadeVagasDisponiveis(vagas);
+        limparFormulario();
         document.getElementById('cadastro_reserva').style.display = 'block';
         document.getElementById('relatorios').style.display = 'none';
     });
@@ -236,6 +218,7 @@
         document.getElementById('cadastro_reserva').style.display = 'none';
         document.getElementById('relatorios').style.display = 'block';
         atualizarRelatorioVagas(vagas);
+        limparFormulario();
     });
 
 
