@@ -38,9 +38,8 @@
     </div>
 
     <div id="relatorios" style="display: none;">
-        <br><br>
-        <h2>Relatório de vagas ocupadas</h2>
-        <br><br>
+        <h3>Relatório de vagas ocupadas</h3>
+
         <table id="tabela_relatorio_vagas">
             <tr>
                 <th>Vaga</th>
@@ -88,6 +87,10 @@
             this.modelo = modelo;
             this.cor = cor;
             this.vaga = Number.parseInt(numeroVaga);
+        }
+
+        toString() {
+            return 'placa: ' + this.placa + '\nproprietario: ' + this.proprietario + '\napartamento: ' + this.apartamento + '\nmodelo: ' + this.modelo + '\ncor: ' + this.cor + '\nvaga: ' + this.vaga;
         }
     }
 
@@ -158,6 +161,7 @@
             limparFormulario();
             atualizarRelatorioVagas(vagas);
             atualizarQuantidadeVagasDisponiveis(vagas);
+            console.log(dado.toString());
         } else {
             alert('Vaga já reservada');
         }
@@ -196,7 +200,7 @@
         htmlTabelaRelatorioVagas.innerHTML += '<tr><th>Vaga</th><th>Proprietário</th><th>Apartamento</th><th>Placa</th><th>Ação</th></tr>';
         let vagasReservadas = vagas.listaDeVagasReservadas();
         vagasReservadas.forEach((element, index) => {
-            htmlTabelaRelatorioVagas.innerHTML += '<tr><td>' + element.vaga + '</td><td>' + element.proprietario + '</td><td>' + element.apartamento + '</td><td>' + element.placa + '</td><td> <button onclick="apagarReserva(' + index + ');">apagar</button></td></tr>';
+            htmlTabelaRelatorioVagas.innerHTML += '<tr><td>' + element.vaga + '</td><td>' + element.proprietario + '</td><td>' + element.apartamento + '</td><td>' + element.placa + '</td><td> <button onclick="apagarReserva(' + index + ');" class="botao_pequeno">apagar</button></td></tr>';
         });
     }
 

@@ -52,6 +52,13 @@ h3{
     padding: 0px;
 }
 
+h4{
+    text-align: center;
+    font-size: 15px;
+    margin: 5px;
+    padding: 0px;
+}
+
 .botao_grande{
     width: 100px;
     height: 40px;
@@ -67,6 +74,22 @@ h3{
     background-color: blue;
 }
 
+.botao_pequeno{
+    width: 75px;
+    height: 25px;
+    padding-left: 5px;
+    padding-right: 5px;
+    text-align: center;
+    border-radius: 5px;
+    border: none;
+    color: white;
+    background-color: darkblue;
+    
+}
+
+.botao_pequeno:hover{
+    background-color: blue;
+}
 
 
 #menu_superior {
