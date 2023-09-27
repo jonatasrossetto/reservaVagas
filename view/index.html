@@ -32,6 +32,7 @@
         Sistema de Reserva de Vagas de Estacionamento <br>
         <button id="tela_cadastro">Cadastro</button>
         <button id="tela_relatorio">Relatório</button>
+        <h4 id="quantidade_vagas_disponiveis"></h4>
     </div>
 
     <div id="cadastro_reserva" style="background-color: aquamarine;display:block;">
@@ -84,6 +85,7 @@
 <script>
     const telaCadastro = document.getElementById('tela_cadastro');
     const telaRelatorio = document.getElementById('tela_relatorio');
+    const quantidadeVagasDisponiveis = document.getElementById('quantidade_vagas_disponiveis');
     const placaVeiculo = document.getElementById('placa_veiculo');
     const nomeProprietario = document.getElementById('nome_proprietario');
     const numeroApartamento = document.getElementById('numero_apartamento');
@@ -162,6 +164,7 @@
 
     let vagas = new Vagas(10);
     atualizarVagasDisponiveis(vagas);
+    atualizarQuantidadeVagasDisponiveis(vagas);
 
     botao_cadastrar.addEventListener('click', () => {
         console.log('clicou em botao_cadastrar');
@@ -173,6 +176,7 @@
             atualizarVagasDisponiveis(vagas);
             limparFormulario();
             atualizarRelatorioVagas(vagas);
+            atualizarQuantidadeVagasDisponiveis(vagas);
         } else {
             alert('Vaga já reservada');
         }
@@ -199,6 +203,7 @@
 
     function apagarReserva(indice) {
         vagas.apagarReserva(indice);
+        atualizarQuantidadeVagasDisponiveis(vagas);
         atualizarVagasDisponiveis(vagas);
         limparFormulario();
         atualizarRelatorioVagas(vagas);
@@ -214,14 +219,20 @@
         });
     }
 
+    function atualizarQuantidadeVagasDisponiveis(vagas) {
+        quantidadeVagasDisponiveis.innerHTML = 'Quantidade de vagas disponíveis: ' + vagas.listaVagasDisponiveis().length;
+    }
+
     telaCadastro.addEventListener('click', () => {
         console.log('clicou em tela_cadastro');
+        atualizarQuantidadeVagasDisponiveis(vagas);
         document.getElementById('cadastro_reserva').style.display = 'block';
         document.getElementById('relatorios').style.display = 'none';
     });
 
     telaRelatorio.addEventListener('click', () => {
         console.log('clicou em tela_relatorio');
+        atualizarQuantidadeVagasDisponiveis(vagas);
         document.getElementById('cadastro_reserva').style.display = 'none';
         document.getElementById('relatorios').style.display = 'block';
         atualizarRelatorioVagas(vagas);
