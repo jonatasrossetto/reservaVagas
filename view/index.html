@@ -30,13 +30,12 @@
 <body>
     <div id="menu_superior">
         Sistema de Reserva de Vagas de Estacionamento <br>
-        <a href=".">Cadastro</a>
-        <a href=".">Relatório</a>
+        <button id="tela_cadastro">Cadastro</button>
+        <button id="tela_relatorio">Relatório</button>
     </div>
 
     <div id="cadastro_reserva" style="background-color: aquamarine;display:block;">
-        <h2>Cadastro de Reserva de Vagas</h2>
-        <h3>Preencha abaixo os dados necessário para reservar uma vaga no estacionamento</h3>
+        <h3>Cadastro de Reserva de Vagas</h3>
         <div id="formulario_cadastro_reserva">
             <label> Placa do Veículo <br></label>
             <input type="text" id="placa_veiculo" /><br>
@@ -53,27 +52,12 @@
             <button id="botao_cadastrar">Cadastrar</button><br><br>
         </div>
         <datalist id="vagas_disponiveis">
-            <option value="01"></option>
-            <option value="02"></option>
-            <option value="03"></option>
-            <option value="04"></option>
-            <option value="05"></option>
-            <option value="06"></option>
-            <option value="07"></option>
-            <option value="08"></option>
-            <option value="09"></option>
-            <option value="10"></option>
-            <option value="11"></option>
-            <option value="12"></option>
-            <option value="13"></option>
         </datalist>
     </div>
 
-    <div id="relatorios" style="display: block;">
+    <div id="relatorios" style="display: none;">
         <br><br>
-        <h2>Relatórios</h2>
-        <a href=".">Vagas ocupadas</a>
-        <a href=".">Todas as vagas</a>
+        <h2>Relatório de vagas ocupadas</h2>
         <br><br>
         <table id="tabela_relatorio_vagas">
             <tr>
@@ -84,11 +68,11 @@
                 <th>ações</th>
             </tr>
             <tr>
-                <td>00</td>
-                <td>nome</td>
-                <td>no apt</td>
-                <td>placa</td>
-                <td> <button>apagar</button></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
             </tr>
         </table>
     </div>
@@ -98,6 +82,8 @@
 
 
 <script>
+    const telaCadastro = document.getElementById('tela_cadastro');
+    const telaRelatorio = document.getElementById('tela_relatorio');
     const placaVeiculo = document.getElementById('placa_veiculo');
     const nomeProprietario = document.getElementById('nome_proprietario');
     const numeroApartamento = document.getElementById('numero_apartamento');
@@ -167,6 +153,7 @@
 
         apagarReserva(indice) {
             console.log('apagando reserva:' + indice);
+            this._statusDaVaga[this._vagasReservadas[indice].vaga - 1] = false;
             this._vagasReservadas.splice(indice, 1);
             console.log(this.listaDeVagasReservadas());
         }
@@ -212,6 +199,8 @@
 
     function apagarReserva(indice) {
         vagas.apagarReserva(indice);
+        atualizarVagasDisponiveis(vagas);
+        limparFormulario();
         atualizarRelatorioVagas(vagas);
     }
 
@@ -224,6 +213,19 @@
             htmlTabelaRelatorioVagas.innerHTML += '<tr><td>' + element.vaga + '</td><td>' + element.proprietario + '</td><td>' + element.apartamento + '</td><td>' + element.placa + '</td><td> <button onclick="apagarReserva(' + index + ');">apagar</button></td></tr>';
         });
     }
+
+    telaCadastro.addEventListener('click', () => {
+        console.log('clicou em tela_cadastro');
+        document.getElementById('cadastro_reserva').style.display = 'block';
+        document.getElementById('relatorios').style.display = 'none';
+    });
+
+    telaRelatorio.addEventListener('click', () => {
+        console.log('clicou em tela_relatorio');
+        document.getElementById('cadastro_reserva').style.display = 'none';
+        document.getElementById('relatorios').style.display = 'block';
+        atualizarRelatorioVagas(vagas);
+    });
 
 
 
