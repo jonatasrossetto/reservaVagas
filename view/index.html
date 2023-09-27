@@ -10,9 +10,9 @@
 
 <body>
     <div id="menu_superior">
-        <h2>Reserva de Vagas</h2>
-        <button id="tela_cadastro">Cadastro</button>
-        <button id="tela_relatorio">Relatório</button>
+        <h1>Reserva de Vagas</h1>
+        <button id="tela_cadastro" class="botao_grande">Cadastro</button>
+        <button id="tela_relatorio" class="botao_grande">Relatórios</button>
         <h4 id="quantidade_vagas_disponiveis"></h4>
     </div>
 
@@ -31,7 +31,7 @@
             <input type="text" id="cor_veiculo" /><br>
             <label> Número da vaga <br></label>
             <input list="vagas_disponiveis" id="vaga_escolhida" /><br><br>
-            <button id="botao_cadastrar">Cadastrar</button><br><br>
+            <button id="botao_cadastrar" class="botao_grande">Cadastrar</button><br><br>
         </div>
         <datalist id="vagas_disponiveis">
         </datalist>
@@ -101,17 +101,16 @@
             }
             for (let i = 0; i < quantidadeVagas; i++) {
                 this._statusDaVaga.push(false);
-                // console.log("vaga: " + (i + 1) + " status:" + this._statusDaVaga[i]);
             }
         }
 
         estaDisponivel(numeroVaga) {
-            return !this._statusDaVaga[numeroVaga - 1];
+            return !this._statusDaVaga[numeroVaga];
         }
 
         reservarVaga(dadosReserva) {
-            if (this.estaDisponivel(dadosReserva.vaga - 1)) {
-                this._statusDaVaga[dadosReserva.vaga - 1] = true;
+            if (this.estaDisponivel(dadosReserva.vaga)) {
+                this._statusDaVaga[dadosReserva.vaga] = true;
                 this._vagasReservadas.push(dadosReserva);
                 return true;
             }
@@ -121,9 +120,8 @@
         listaVagasDisponiveis() {
             let vagasDisponiveis = [];
             for (let i = 0; i < this._statusDaVaga.length; i++) {
-                // console.log("vaga: " + (i + 1) + " status:" + this._statusDaVaga[i]);
                 if (!this._statusDaVaga[i]) {
-                    vagasDisponiveis.push(i + 1);
+                    vagasDisponiveis.push(i);
                 }
             }
             return vagasDisponiveis;
@@ -136,7 +134,7 @@
 
         apagarReserva(indice) {
             console.log('apagando reserva:' + indice);
-            this._statusDaVaga[this._vagasReservadas[indice].vaga - 1] = false;
+            this._statusDaVaga[this._vagasReservadas[indice].vaga] = false;
             this._vagasReservadas.splice(indice, 1);
             console.log(this.listaDeVagasReservadas());
         }
