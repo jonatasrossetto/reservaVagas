@@ -142,6 +142,8 @@
     }
 
     let vagas = new Vagas(10);
+    vagas.reservarVaga(new DadosReserva('ABC-1234', 'João', '101', 'Fiat Uno', 'Preto', 3));
+    vagas.reservarVaga(new DadosReserva('BBB-1234', 'Maria', '202', 'Hb20', 'Preto', 7));
     atualizarVagasDisponiveis(vagas);
     atualizarQuantidadeVagasDisponiveis(vagas);
 
