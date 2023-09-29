@@ -6,6 +6,8 @@ DESAFIO 1 <br>
 SETEMBRO/2023 <br>
 JONATAS ROSSETTO
 
+no github pages: https://jonatasrossetto.github.io/reservaVagas/
+
 **_ Objetivo _** <br>
 
 Desenvolver um sistema de Frontend para um sistema de estacionamento com pelo menos 2 telas:
@@ -32,3 +34,4 @@ Limitado ao uso de HTML, CSS e JavaScript Vannila.
 - Download dos arquivos do repositório em uma única pasta
 - Abrir o arquivo index.html no navegador (na etapa de desenvolvimento utiizamos o Chrome para os testes)
 - Apenas como exemplo o app inicia com duas vagas já cadastradas para popular os relatórios
+- ou no github pages: https://jonatasrossetto.github.io/reservaVagas/
