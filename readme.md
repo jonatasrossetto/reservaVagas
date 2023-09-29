@@ -15,13 +15,20 @@ Desenvolver um sistema de Frontend para um sistema de estacionamento com pelo me
 
 Limitado ao uso de HTML, CSS e JavaScript Vannila.
 
-- Dessa forma, a tarefa consiste em construir duas telas: listar vagas e cadastro de reserva. Na tela de listar, podem ser utilizadas informações fictícias, uma vez que nossa aplicação front-end não Desenvolvimento de Webpossui um back-end para implementação dos cadastros em banco de dados e retorno de informações cadastradas.
+- Dessa forma, a tarefa consiste em construir duas telas: listar vagas e cadastro de reserva. Na tela de listar, podem ser utilizadas informações fictícias.
 - A tela de cadastro deve conter um formulário com as informações descritas no começo e um botão de salvar. Ao clicar nesse botão, as informações do formulário deverão ser exibidas em um console.log, e um pop-up com a mensagem de confirmação de cadastro realizado com sucesso.
 
-**_ Oque será implementado _** <br>
+**_ Oque está implementado _** <br>
 
-- A idéia é fazer um sistema SPA sem frameworks, utilizando divs para isolar as páginas que serão roteadas com o auxílio de um menu superior sempre presente no app.
-- Os estilos serão organizados em um arquivo CSS.
-- Um controller em javascript será responsável por controlar o display das rotas.
-- Um controller em javascript será responsável por gerenciar os dados da tela de cadastro, vamos utilizar o session storage para persistência dos dados.
-- Um controller em javascript será responsável pela exibição do relatório.
+- A idéia foi criar um sistema SPA simples sem frameworks, utilizando divs para isolar as telas que serão roteadas com o auxílio de um menu superior sempre presente no app. O arquivo HTML, neste caso único, representa a camada de views.
+- Os estilos estão organizados em um arquivo CSS.
+- Em js temos uma classe DadosReserva que administra os dados de uma reserva e uma classe Vagas que administra o conjunto de vagas (esta seria a camada de modelos/entidades)
+- Uma série de listeners controlam as ações de mudar de tela e de realizar o cadastro de uma vaga ou apagar uma vaga cadastrada (esta seria a camada de controllers).
+- Na tela de cadastro o campo "Número da Vaga" apresenta apenas a lista de vagas livres.
+- O relatório de vagas ocupadas permite apagar uma reserva de vaga
+
+**_ Como executar o aplicativo _** <br>
+
+- Download dos arquivos do repositório em uma única pasta
+- Abrir o arquivo index.html no navegador (na etapa de desenvolvimento utiizamos o Chrome para os testes)
+- Apenas como exemplo o app inicia com duas vagas já cadastradas para popular os relatórios

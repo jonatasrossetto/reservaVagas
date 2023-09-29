@@ -75,7 +75,7 @@ class Vagas {
       return false;
     }
     if (!dadosReserva.dadosValidos()) {
-      alert('Dados inválidos');
+      alert('Por favor preencha todos os campos do formulário');
       return false;
     }
     this._statusDaVaga[dadosReserva.vaga] = true;
