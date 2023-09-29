@@ -1,7 +1,10 @@
 //********************************************** */
 //declacarações de variáveis para manipular o DOM
 const telaCadastro = document.getElementById('tela_cadastro');
-const telaRelatorio = document.getElementById('tela_relatorio');
+const telaRelatorioOcupadas = document.getElementById(
+  'tela_relatorio_ocupadas'
+);
+const telaRelatorioLivres = document.getElementById('tela_relatorio_livres');
 const quantidadeVagasDisponiveis = document.getElementById(
   'quantidade_vagas_disponiveis'
 );
@@ -19,10 +22,6 @@ const vagaEscolhida = document.getElementById('vaga_escolhida');
 //classe com modelo para armazenar os dados da reserva
 class DadosReserva {
   constructor(placa, proprietario, apartamento, modelo, cor, numeroVaga) {
-    // if (!placa || !proprietario || !apartamento || !modelo || !cor || !numeroVaga) {
-    //     alert('Dados inválidos');
-    //     throw new Error('Dados inválidos');
-    // }
     this.placa = placa;
     this.proprietario = proprietario;
     this.apartamento = apartamento;
@@ -33,6 +32,21 @@ class DadosReserva {
 
   toString() {
     return `placa: ${this.placa}\nproprietario: ${this.proprietario}\napartamento: ${this.apartamento}\nmodelo: ${this.modelo}\ncor: ${this.cor}\nvaga: ${this.vaga}`;
+  }
+
+  dadosValidos() {
+    console.log(isNaN(this.numeroVaga));
+    if (
+      !this.placa ||
+      !this.proprietario ||
+      !this.apartamento ||
+      !this.modelo ||
+      !this.cor ||
+      isNaN(this.vaga)
+    ) {
+      return false;
+    }
+    return true;
   }
 }
 
@@ -55,12 +69,18 @@ class Vagas {
   }
 
   reservarVaga(dadosReserva) {
-    if (this.estaDisponivel(dadosReserva.vaga)) {
-      this._statusDaVaga[dadosReserva.vaga] = true;
-      this._vagasReservadas.push(dadosReserva);
-      return true;
+    console.log('dados validos:' + dadosReserva.dadosValidos());
+    if (!this.estaDisponivel(dadosReserva.vaga)) {
+      alert('Vaga já reservada');
+      return false;
     }
-    return false;
+    if (!dadosReserva.dadosValidos()) {
+      alert('Dados inválidos');
+      return false;
+    }
+    this._statusDaVaga[dadosReserva.vaga] = true;
+    this._vagasReservadas.push(dadosReserva);
+    return true;
   }
 
   listaVagasDisponiveis() {
@@ -83,6 +103,10 @@ class Vagas {
     this._vagasReservadas.splice(indice, 1);
     console.log(this.listaDeVagasReservadas());
   }
+
+  status() {
+    return this._statusDaVaga;
+  }
 }
 
 //********************************************** */
@@ -99,7 +123,8 @@ atualizarQuantidadeVagasDisponiveis(vagas);
 //** EVENT LISTENERS */
 
 //cria event listener para o botão de cadastrar
-botao_cadastrar.addEventListener('click', () => {
+botao_cadastrar.addEventListener('click', (e) => {
+  e.preventDefault();
   console.log('clicou em botao_cadastrar');
   let dado = new DadosReserva(
     placaVeiculo.value,
@@ -110,16 +135,13 @@ botao_cadastrar.addEventListener('click', () => {
     vagaEscolhida.value
   );
   let reservaRealizada = vagas.reservarVaga(dado);
-  // console.log(vagas.listaVagasDisponiveis());
   if (reservaRealizada) {
     alert('Reserva realizada com sucesso');
     atualizarVagasDisponiveis(vagas);
-    limparFormulario();
-    atualizarRelatorioVagas(vagas);
+    atualizarRelatorioVagasOcupadas(vagas);
     atualizarQuantidadeVagasDisponiveis(vagas);
     console.log(dado.toString());
-  } else {
-    alert('Vaga já reservada');
+    limparFormulario();
   }
 });
 
@@ -128,17 +150,23 @@ telaCadastro.addEventListener('click', () => {
   console.log('clicou em tela_cadastro');
   atualizarQuantidadeVagasDisponiveis(vagas);
   limparFormulario();
-  document.getElementById('cadastro_reserva').style.display = 'block';
-  document.getElementById('relatorios').style.display = 'none';
+  displayRota('block', 'none', 'none');
 });
 
 //cria event listener para os botões de navegação - tela de relatórios
-telaRelatorio.addEventListener('click', () => {
+telaRelatorioOcupadas.addEventListener('click', () => {
   console.log('clicou em tela_relatorio');
   atualizarQuantidadeVagasDisponiveis(vagas);
-  document.getElementById('cadastro_reserva').style.display = 'none';
-  document.getElementById('relatorios').style.display = 'block';
-  atualizarRelatorioVagas(vagas);
+  displayRota('none', 'block', 'none');
+  atualizarRelatorioVagasOcupadas(vagas);
+  limparFormulario();
+});
+
+telaRelatorioLivres.addEventListener('click', () => {
+  console.log('clicou em tela_relatorio_livres');
+  atualizarQuantidadeVagasDisponiveis(vagas);
+  displayRota('none', 'none', 'block');
+  atualizarRelatorioVagasLivres(vagas);
   limparFormulario();
 });
 
@@ -182,11 +210,11 @@ function apagarReserva(indice) {
   atualizarQuantidadeVagasDisponiveis(vagas);
   atualizarVagasDisponiveis(vagas);
   limparFormulario();
-  atualizarRelatorioVagas(vagas);
+  atualizarRelatorioVagasOcupadas(vagas);
 }
 
 //atualiza os dados apresentados no relatório de vagas
-function atualizarRelatorioVagas(vagas) {
+function atualizarRelatorioVagasOcupadas(vagas) {
   const htmlTabelaRelatorioVagas = document.getElementById(
     'tabela_relatorio_vagas'
   );
@@ -210,8 +238,34 @@ function atualizarRelatorioVagas(vagas) {
   });
 }
 
+//atualiza os dados apresentados no relatório de vagas
+function atualizarRelatorioVagasLivres(vagas) {
+  const htmlTabelaRelatorioVagas = document.getElementById(
+    'tabela_relatorio_vagas_livres'
+  );
+  htmlTabelaRelatorioVagas.innerHTML = '';
+  htmlTabelaRelatorioVagas.innerHTML +=
+    '<tr><th>Vaga</th><th>Situação</th></tr>';
+  let status = vagas.status();
+  status.forEach((element, index) => {
+    htmlTabelaRelatorioVagas.innerHTML +=
+      '<tr><td>' +
+      index +
+      '</td><td>' +
+      (element ? 'ocupada' : 'livre') +
+      '</td></tr>';
+  });
+}
+
 //atualiza o display da quantidade de vagas disponíveis
 function atualizarQuantidadeVagasDisponiveis(vagas) {
   quantidadeVagasDisponiveis.innerHTML =
     'Quantidade de vagas disponíveis: ' + vagas.listaVagasDisponiveis().length;
+}
+
+function displayRota(cadastro, relatorioOcupadas, relatorioLivres) {
+  document.getElementById('cadastro_reserva').style.display = cadastro;
+  document.getElementById('relatorio_ocupadas').style.display =
+    relatorioOcupadas;
+  document.getElementById('relatorio_livres').style.display = relatorioLivres;
 }
